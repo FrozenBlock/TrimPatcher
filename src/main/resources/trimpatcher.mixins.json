@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8.5",
+  "package": "net.frozenblock.trimpatcher.mixin",
+  "compatibilityLevel": "JAVA_21",
+  "mixins": [
+  ],
+  "client": [
+    "client.BlockModelWrapperUnbakedMixin",
+    "client.SpriteSourceListMixin",
+    "client.TrimMaterialPropertyMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
