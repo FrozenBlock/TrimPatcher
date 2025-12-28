@@ -32,6 +32,7 @@ import net.fabricmc.api.Environment;
 import net.frozenblock.trimpatcher.TrimPatcherClient;
 import net.frozenblock.trimpatcher.client.renderer.item.FakeUnbakedItemModel;
 import net.frozenblock.trimpatcher.client.resources.model.ModelStateWrapper;
+import net.frozenblock.trimpatcher.client.util.TrimPaths;
 import net.minecraft.client.data.models.model.ItemModelUtils;
 import net.minecraft.client.renderer.block.model.TextureSlots;
 import net.minecraft.client.renderer.item.BlockModelWrapper;
@@ -87,10 +88,10 @@ public abstract class BlockModelWrapperUnbakedMixin {
 		final String path = id.getPath();
 		if (!path.contains("item/")) return original;
 
-		final String armorType = TrimPatcherClient.trimAutoModelEndingTerms().stream().filter(path::endsWith).findFirst().orElse(null);
+		final String armorType = TrimPaths.TRIM_AUTO_MODEL_ENDING_TERMS.stream().filter(path::endsWith).findFirst().orElse(null);
 		if (armorType == null) return original;
 
-		final Identifier trimOverlayPrefix = TrimPatcherClient.armorToOverlayPrefix().get(armorType);
+		final Identifier trimOverlayPrefix = TrimPaths.ARMOR_TO_OVERLAY_PREFIX.get(armorType);
 		if (trimOverlayPrefix == null) return original;
 
 		final String armorMaterialGuess = path.replace("item/", "").replace("_" + armorType, "");

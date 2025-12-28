@@ -35,32 +35,6 @@ public final class TrimPatcherClient implements ClientModInitializer {
 	public static final Identifier TRIM_PALETTE_KEY = Identifier.withDefaultNamespace("trims/color_palettes/trim_palette");
 	private static final Map<String, String> FOUND_OVERLAY_TEXTURES = new ConcurrentHashMap<>();
 	private static final Map<String, String> FOUND_DARKER_OVERLAY_TEXTURES = new ConcurrentHashMap<>();
-	public static List<String> trimAutoModelEndingTerms() {
-		List<String> list = new ArrayList<>();
-		list.addAll(TrimPaths.TRIMMABLE_HELMET_PATHS);
-		list.addAll(TrimPaths.TRIMMABLE_CHESTPLATE_PATHS);
-		list.addAll(TrimPaths.TRIMMABLE_LEGGINGS_PATHS);
-		list.addAll(TrimPaths.TRIMMABLE_BOOTS_PATHS);
-		return list;
-	}
-	public static Map<String, Identifier> armorToOverlayPrefix() {
-		Object2ObjectLinkedOpenHashMap<String, Identifier> map = new Object2ObjectLinkedOpenHashMap<>();
-
-		TrimPaths.TRIMMABLE_HELMET_PATHS.forEach(
-			path -> map.put(path, ItemModelGenerators.TRIM_PREFIX_HELMET)
-		);
-		TrimPaths.TRIMMABLE_CHESTPLATE_PATHS.forEach(
-			path -> map.put(path, ItemModelGenerators.TRIM_PREFIX_CHESTPLATE)
-		);
-		TrimPaths.TRIMMABLE_LEGGINGS_PATHS.forEach(
-			path -> map.put(path, ItemModelGenerators.TRIM_PREFIX_LEGGINGS)
-		);
-		TrimPaths.TRIMMABLE_BOOTS_PATHS.forEach(
-			path -> map.put(path, ItemModelGenerators.TRIM_PREFIX_BOOTS)
-		);
-
-		return map;
-	}
 
 	@Override
 	public void onInitializeClient() {}

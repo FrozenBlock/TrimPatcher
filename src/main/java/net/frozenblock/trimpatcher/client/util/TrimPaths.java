@@ -17,42 +17,37 @@
 
 package net.frozenblock.trimpatcher.client.util;
 
+import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
+import net.frozenblock.trimpatcher.TPConstants;
+import net.minecraft.client.data.models.ItemModelGenerators;
+import net.minecraft.resources.Identifier;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Environment(EnvType.CLIENT)
 public class TrimPaths {
-	public static final List<String> TRIMMABLE_HELMET_PATHS = new ArrayList<>();
-	public static final List<String> TRIMMABLE_CHESTPLATE_PATHS = new ArrayList<>();
-	public static final List<String> TRIMMABLE_LEGGINGS_PATHS = new ArrayList<>();
-	public static final List<String> TRIMMABLE_BOOTS_PATHS = new ArrayList<>();
+	public static List<String> TRIM_AUTO_MODEL_ENDING_TERMS = new ArrayList<>();
+	public static Map<String, Identifier> ARMOR_TO_OVERLAY_PREFIX = new Object2ObjectLinkedOpenHashMap<>();
+
 	static {
-		TRIMMABLE_HELMET_PATHS.add("helmet");
-		TRIMMABLE_CHESTPLATE_PATHS.add("chestplate");
-		TRIMMABLE_LEGGINGS_PATHS.add("leggings");
-		TRIMMABLE_BOOTS_PATHS.add("boots");
+		addPath("helmet", ItemModelGenerators.TRIM_PREFIX_HELMET);
+		addPath("chestplate", ItemModelGenerators.TRIM_PREFIX_CHESTPLATE);
+		addPath("leggings", ItemModelGenerators.TRIM_PREFIX_LEGGINGS);
+		addPath("boots", ItemModelGenerators.TRIM_PREFIX_BOOTS);
 	}
 
-	public static void addHelmetPath(String path) {
-		if (path != null && !path.isEmpty() && !TRIMMABLE_HELMET_PATHS.contains(path)) {
-			TRIMMABLE_HELMET_PATHS.add(path);
-		}
-	}
-	public static void addChestplatePath(String path) {
-		if (path != null && !path.isEmpty() && !TRIMMABLE_CHESTPLATE_PATHS.contains(path)) {
-			TRIMMABLE_CHESTPLATE_PATHS.add(path);
-		}
-	}
-	public static void addLeggingsPath(String path) {
-		if (path != null && !path.isEmpty() && !TRIMMABLE_LEGGINGS_PATHS.contains(path)) {
-			TRIMMABLE_LEGGINGS_PATHS.add(path);
-		}
-	}
-	public static void addBootsPath(String path) {
-		if (path != null && !path.isEmpty() && !TRIMMABLE_BOOTS_PATHS.contains(path)) {
-			TRIMMABLE_BOOTS_PATHS.add(path);
+	public static void addPath(String path, Identifier type) {
+		if (path != null && !path.isEmpty()) {
+			if (TRIM_AUTO_MODEL_ENDING_TERMS.contains(path)) {
+				TPConstants.warn("Skipping duplicate trim path: " + path + ", for: " + type, true);
+				TPConstants.warn("Currently registered category for " + path + " is: " + ARMOR_TO_OVERLAY_PREFIX.get(path), true);
+				return;
+			}
+			TRIM_AUTO_MODEL_ENDING_TERMS.add(path);
+			ARMOR_TO_OVERLAY_PREFIX.put(path, type);
 		}
 	}
 }
