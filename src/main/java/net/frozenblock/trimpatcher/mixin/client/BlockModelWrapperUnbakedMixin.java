@@ -87,10 +87,10 @@ public abstract class BlockModelWrapperUnbakedMixin {
 		final String path = id.getPath();
 		if (!path.contains("item/")) return original;
 
-		final String armorType = TrimPatcherClient.TRIM_AUTO_MODEL_ENDING_TERMS.stream().filter(path::endsWith).findFirst().orElse(null);
+		final String armorType = TrimPatcherClient.trimAutoModelEndingTerms().stream().filter(path::endsWith).findFirst().orElse(null);
 		if (armorType == null) return original;
 
-		final Identifier trimOverlayPrefix = TrimPatcherClient.ARMOR_TO_OVERLAY_PREFIX.get(armorType);
+		final Identifier trimOverlayPrefix = TrimPatcherClient.armorToOverlayPrefix().get(armorType);
 		if (trimOverlayPrefix == null) return original;
 
 		final String armorMaterialGuess = path.replace("item/", "").replace("_" + armorType, "");
