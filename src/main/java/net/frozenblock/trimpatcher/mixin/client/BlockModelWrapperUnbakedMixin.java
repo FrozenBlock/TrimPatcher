@@ -32,6 +32,7 @@ import net.fabricmc.api.Environment;
 import net.frozenblock.trimpatcher.TrimPatcherClient;
 import net.frozenblock.trimpatcher.client.renderer.item.FakeUnbakedItemModel;
 import net.frozenblock.trimpatcher.client.resources.model.ModelStateWrapper;
+import net.frozenblock.trimpatcher.client.util.TrimPaths;
 import net.minecraft.client.data.models.model.ItemModelUtils;
 import net.minecraft.client.renderer.block.model.TextureSlots;
 import net.minecraft.client.renderer.item.BlockModelWrapper;
@@ -87,10 +88,10 @@ public abstract class BlockModelWrapperUnbakedMixin {
 		final String path = id.getPath();
 		if (!path.contains("item/")) return original;
 
-		final String armorType = TrimPatcherClient.TRIM_AUTO_MODEL_ENDING_TERMS.stream().filter(path::endsWith).findFirst().orElse(null);
+		final String armorType = TrimPaths.TRIM_AUTO_MODEL_ENDING_TERMS.stream().filter(path::endsWith).findFirst().orElse(null);
 		if (armorType == null) return original;
 
-		final ResourceLocation trimOverlayPrefix = TrimPatcherClient.ARMOR_TO_OVERLAY_PREFIX.get(armorType);
+		final ResourceLocation trimOverlayPrefix = TrimPaths.ARMOR_TO_OVERLAY_PREFIX.get(armorType);
 		if (trimOverlayPrefix == null) return original;
 
 		final String armorMaterialGuess = path.replace("item/", "").replace("_" + armorType, "");
@@ -100,14 +101,19 @@ public abstract class BlockModelWrapperUnbakedMixin {
 		this.trimPatcher$trimOverlayLayer = slots.getMaterial("layer1") != null ? "layer2" : "layer1";
 		List<SelectItemModel.SwitchCase<ResourceKey<TrimMaterial>>> newTrimOverlays = new ArrayList<>();
 
+		final List<String> usedOverlayMaterials = new ArrayList<>();
 		this.trimPatcher$generatingNewModel = true;
 		for (String overlayMaterial : applicableOverlayMaterials) {
-			this.trimPatcher$material = new Material(TextureAtlas.LOCATION_BLOCKS, trimOverlayPrefix.withSuffix("_" + overlayMaterial));;
+			final String materialWithoutDarkerSuffix = overlayMaterial.replace("_darker", "");
+			if (usedOverlayMaterials.contains(materialWithoutDarkerSuffix)) continue;
+
+			this.trimPatcher$material = new Material(TextureAtlas.LOCATION_BLOCKS, trimOverlayPrefix.withSuffix("_" + overlayMaterial));
 			this.trimPatcher$materialName = overlayMaterial;
+			usedOverlayMaterials.add(materialWithoutDarkerSuffix);
 
 			newTrimOverlays.add(
 				ItemModelUtils.when(
-					ResourceKey.create(Registries.TRIM_MATERIAL, ResourceLocation.withDefaultNamespace(overlayMaterial.replace("_darker", ""))),
+					ResourceKey.create(Registries.TRIM_MATERIAL, ResourceLocation.withDefaultNamespace(materialWithoutDarkerSuffix)),
 					new FakeUnbakedItemModel(this.bake(context))
 				)
 			);

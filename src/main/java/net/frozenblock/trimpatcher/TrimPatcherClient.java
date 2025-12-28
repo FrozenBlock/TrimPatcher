@@ -18,7 +18,6 @@
 package net.frozenblock.trimpatcher;
 
 import com.google.common.collect.ImmutableList;
-import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -26,7 +25,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.resources.ResourceLocation;
 
 @Environment(EnvType.CLIENT)
@@ -34,22 +32,9 @@ public final class TrimPatcherClient implements ClientModInitializer {
 	public static final ResourceLocation TRIM_PALETTE_KEY = ResourceLocation.withDefaultNamespace("trims/color_palettes/trim_palette");
 	private static final Map<String, String> FOUND_OVERLAY_TEXTURES = new ConcurrentHashMap<>();
 	private static final Map<String, String> FOUND_DARKER_OVERLAY_TEXTURES = new ConcurrentHashMap<>();
-	public static final List<String> TRIM_AUTO_MODEL_ENDING_TERMS = new ArrayList<>() {{
-		add("helmet");
-		add("chestplate");
-		add("chestplate");
-		add("boots");
-	}};
-	public static final Map<String, ResourceLocation> ARMOR_TO_OVERLAY_PREFIX = new Object2ObjectLinkedOpenHashMap<>() {{
-		put("helmet", ItemModelGenerators.TRIM_PREFIX_HELMET);
-		put("chestplate", ItemModelGenerators.TRIM_PREFIX_CHESTPLATE);
-		put("leggings", ItemModelGenerators.TRIM_PREFIX_LEGGINGS);
-		put("boots", ItemModelGenerators.TRIM_PREFIX_BOOTS);
-	}};
 
 	@Override
-	public void onInitializeClient() {
-	}
+	public void onInitializeClient() {}
 
 	public synchronized static List<String> getApplicableOverlayMaterials(String guessedMaterial) {
 		TPConstants.log("Armor material guess " + guessedMaterial, TPConstants.UNSTABLE_LOGGING);
@@ -70,7 +55,7 @@ public final class TrimPatcherClient implements ClientModInitializer {
 			final String endRemoved = guessedMaterial.substring(0, guessedMaterial.length() - 2);
 			getApplicableOverlayMaterials(endRemoved).stream()
 				.filter(pair -> !foundOverlayMaterials.contains(pair))
-				.forEach(foundOverlayMaterials::add);
+				.forEach(foundOverlayMaterials::addFirst);
 		}
 
 		return ImmutableList.copyOf(foundOverlayMaterials);
