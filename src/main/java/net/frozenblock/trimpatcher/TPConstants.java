@@ -1,7 +1,7 @@
 package net.frozenblock.trimpatcher;
 
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,12 +37,12 @@ public final class TPConstants {
 		if (shouldPrint) LOGGER.error(message, new Throwable(message).fillInStackTrace());
 	}
 
-	public static ResourceLocation id(String path) {
-		return ResourceLocation.fromNamespaceAndPath(MOD_ID, path);
+	public static Identifier id(String path) {
+		return Identifier.fromNamespaceAndPath(MOD_ID, path);
 	}
 
-	public static ResourceLocation vanillaId(String path) {
-		return ResourceLocation.withDefaultNamespace(path);
+	public static Identifier vanillaId(String path) {
+		return Identifier.withDefaultNamespace(path);
 	}
 
 	public static String string(String path) {

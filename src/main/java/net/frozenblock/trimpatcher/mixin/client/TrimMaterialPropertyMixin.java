@@ -4,8 +4,8 @@ import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.renderer.item.properties.select.TrimMaterialProperty;
+import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.equipment.trim.TrimMaterial;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -20,7 +20,7 @@ public class TrimMaterialPropertyMixin {
 	)
 	public ResourceKey<TrimMaterial> trimPatcher$useDefaultNamespace(ResourceKey<TrimMaterial> original) {
 		if (original == null) return original;
-		return ResourceKey.create(original.registryKey(), ResourceLocation.withDefaultNamespace(original.location().getPath()));
+		return ResourceKey.create(original.registryKey(), Identifier.withDefaultNamespace(original.identifier().getPath()));
 	}
 
 }

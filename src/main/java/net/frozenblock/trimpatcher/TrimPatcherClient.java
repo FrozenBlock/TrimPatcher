@@ -10,11 +10,11 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.data.models.ItemModelGenerators;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 @Environment(EnvType.CLIENT)
 public final class TrimPatcherClient implements ClientModInitializer {
-	public static final ResourceLocation TRIM_PALETTE_KEY = ResourceLocation.withDefaultNamespace("trims/color_palettes/trim_palette");
+	public static final Identifier TRIM_PALETTE_KEY = Identifier.withDefaultNamespace("trims/color_palettes/trim_palette");
 	private static final Map<String, String> FOUND_OVERLAY_TEXTURES = new ConcurrentHashMap<>();
 	private static final Map<String, String> FOUND_DARKER_OVERLAY_TEXTURES = new ConcurrentHashMap<>();
 	public static final List<String> TRIM_AUTO_MODEL_ENDING_TERMS = new ArrayList<>() {{
@@ -23,7 +23,7 @@ public final class TrimPatcherClient implements ClientModInitializer {
 		add("chestplate");
 		add("boots");
 	}};
-	public static final Map<String, ResourceLocation> ARMOR_TO_OVERLAY_PREFIX = new Object2ObjectLinkedOpenHashMap<>() {{
+	public static final Map<String, Identifier> ARMOR_TO_OVERLAY_PREFIX = new Object2ObjectLinkedOpenHashMap<>() {{
 		put("helmet", ItemModelGenerators.TRIM_PREFIX_HELMET);
 		put("chestplate", ItemModelGenerators.TRIM_PREFIX_CHESTPLATE);
 		put("leggings", ItemModelGenerators.TRIM_PREFIX_LEGGINGS);

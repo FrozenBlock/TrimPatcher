@@ -10,7 +10,7 @@ import net.frozenblock.trimpatcher.TrimPatcherClient;
 import net.minecraft.client.renderer.texture.atlas.SpriteSource;
 import net.minecraft.client.renderer.texture.atlas.SpriteSourceList;
 import net.minecraft.client.renderer.texture.atlas.sources.PalettedPermutations;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 
@@ -37,18 +37,18 @@ public class SpriteSourceListMixin {
 
 		if (trimSources.isEmpty()) return original.call(list);
 
-		final List<ResourceLocation> textures = new ArrayList<>();
-		final Map<String, ResourceLocation> permutations = new Object2ObjectLinkedOpenHashMap<>();
+		final List<Identifier> textures = new ArrayList<>();
+		final Map<String, Identifier> permutations = new Object2ObjectLinkedOpenHashMap<>();
 
 		for (PalettedPermutations palettedPermutations : trimSources) {
-			for (ResourceLocation texture : palettedPermutations.textures()) {
+			for (Identifier texture : palettedPermutations.textures()) {
 				if (!textures.contains(texture)) textures.add(texture);
 			}
 
-			for (Map.Entry<String, ResourceLocation> permutation : palettedPermutations.permutations().entrySet()) {
+			for (Map.Entry<String, Identifier> permutation : palettedPermutations.permutations().entrySet()) {
 				final String key = permutation.getKey();
 				if (!permutations.containsKey(key)) {
-					final ResourceLocation texture = permutation.getValue();
+					final Identifier texture = permutation.getValue();
 					permutations.put(key, texture);
 					TrimPatcherClient.addFoundOverlayMaterial(key);
 				}
