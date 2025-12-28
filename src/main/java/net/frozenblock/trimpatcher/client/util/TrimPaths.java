@@ -18,14 +18,14 @@
 package net.frozenblock.trimpatcher.client.util;
 
 import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.frozenblock.trimpatcher.TPConstants;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.resources.ResourceLocation;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 @Environment(EnvType.CLIENT)
 public class TrimPaths {
@@ -39,15 +39,16 @@ public class TrimPaths {
 		addPath("boots", ItemModelGenerators.TRIM_PREFIX_BOOTS);
 	}
 
-	public static void addPath(String path, ResourceLocation type) {
-		if (path != null && !path.isEmpty()) {
-			if (TRIM_AUTO_MODEL_ENDING_TERMS.contains(path)) {
-				TPConstants.warn("Skipping duplicate trim path: " + path + ", for: " + type, true);
-				TPConstants.warn("Currently registered category for " + path + " is: " + ARMOR_TO_OVERLAY_PREFIX.get(path), true);
-				return;
-			}
-			TRIM_AUTO_MODEL_ENDING_TERMS.add(path);
-			ARMOR_TO_OVERLAY_PREFIX.put(path, type);
+	public synchronized static void addPath(String path, ResourceLocation type) {
+		if (path == null || path.isEmpty()) return;
+
+		if (TRIM_AUTO_MODEL_ENDING_TERMS.contains(path)) {
+			TPConstants.warn("Skipping duplicate trim path: " + path + ", for: " + type, true);
+			TPConstants.warn("Currently registered category for " + path + " is: " + ARMOR_TO_OVERLAY_PREFIX.get(path), true);
+			return;
 		}
+
+		TRIM_AUTO_MODEL_ENDING_TERMS.add(path);
+		ARMOR_TO_OVERLAY_PREFIX.put(path, type);
 	}
 }

@@ -55,7 +55,7 @@ public final class TrimPatcherClient implements ClientModInitializer {
 			final String endRemoved = guessedMaterial.substring(0, guessedMaterial.length() - 2);
 			getApplicableOverlayMaterials(endRemoved).stream()
 				.filter(pair -> !foundOverlayMaterials.contains(pair))
-				.forEach(foundOverlayMaterials::add);
+				.forEach(foundOverlayMaterials::addFirst);
 		}
 
 		return ImmutableList.copyOf(foundOverlayMaterials);

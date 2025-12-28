@@ -101,14 +101,19 @@ public abstract class BlockModelWrapperUnbakedMixin {
 		this.trimPatcher$trimOverlayLayer = slots.getMaterial("layer1") != null ? "layer2" : "layer1";
 		List<SelectItemModel.SwitchCase<ResourceKey<TrimMaterial>>> newTrimOverlays = new ArrayList<>();
 
+		final List<String> usedOverlayMaterials = new ArrayList<>();
 		this.trimPatcher$generatingNewModel = true;
 		for (String overlayMaterial : applicableOverlayMaterials) {
-			this.trimPatcher$material = new Material(TextureAtlas.LOCATION_BLOCKS, trimOverlayPrefix.withSuffix("_" + overlayMaterial));;
+			final String materialWithoutDarkerSuffix = overlayMaterial.replace("_darker", "");
+			if (usedOverlayMaterials.contains(materialWithoutDarkerSuffix)) continue;
+
+			this.trimPatcher$material = new Material(TextureAtlas.LOCATION_BLOCKS, trimOverlayPrefix.withSuffix("_" + overlayMaterial));
 			this.trimPatcher$materialName = overlayMaterial;
+			usedOverlayMaterials.add(materialWithoutDarkerSuffix);
 
 			newTrimOverlays.add(
 				ItemModelUtils.when(
-					ResourceKey.create(Registries.TRIM_MATERIAL, ResourceLocation.withDefaultNamespace(overlayMaterial.replace("_darker", ""))),
+					ResourceKey.create(Registries.TRIM_MATERIAL, ResourceLocation.withDefaultNamespace(materialWithoutDarkerSuffix)),
 					new FakeUnbakedItemModel(this.bake(context))
 				)
 			);
