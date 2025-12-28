@@ -18,7 +18,6 @@
 package net.frozenblock.trimpatcher;
 
 import com.google.common.collect.ImmutableList;
-import it.unimi.dsi.fastutil.objects.Object2ObjectLinkedOpenHashMap;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -26,8 +25,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.frozenblock.trimpatcher.client.util.TrimPaths;
-import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.resources.Identifier;
 
 @Environment(EnvType.CLIENT)
@@ -58,7 +55,7 @@ public final class TrimPatcherClient implements ClientModInitializer {
 			final String endRemoved = guessedMaterial.substring(0, guessedMaterial.length() - 2);
 			getApplicableOverlayMaterials(endRemoved).stream()
 				.filter(pair -> !foundOverlayMaterials.contains(pair))
-				.forEach(foundOverlayMaterials::add);
+				.forEach(foundOverlayMaterials::addFirst);
 		}
 
 		return ImmutableList.copyOf(foundOverlayMaterials);
