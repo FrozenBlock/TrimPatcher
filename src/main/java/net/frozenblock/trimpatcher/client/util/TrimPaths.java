@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Environment(EnvType.CLIENT)
-public class TrimPathLists {
+public class TrimPaths {
 	public static final List<String> TRIMMABLE_HELMET_PATHS = new ArrayList<>();
 	public static final List<String> TRIMMABLE_CHESTPLATE_PATHS = new ArrayList<>();
 	public static final List<String> TRIMMABLE_LEGGINGS_PATHS = new ArrayList<>();

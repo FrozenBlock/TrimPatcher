@@ -26,7 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.frozenblock.trimpatcher.client.util.TrimPathLists;
+import net.frozenblock.trimpatcher.client.util.TrimPaths;
 import net.minecraft.client.data.models.ItemModelGenerators;
 import net.minecraft.resources.Identifier;
 
@@ -37,25 +37,25 @@ public final class TrimPatcherClient implements ClientModInitializer {
 	private static final Map<String, String> FOUND_DARKER_OVERLAY_TEXTURES = new ConcurrentHashMap<>();
 	public static List<String> trimAutoModelEndingTerms() {
 		List<String> list = new ArrayList<>();
-		list.addAll(TrimPathLists.TRIMMABLE_HELMET_PATHS);
-		list.addAll(TrimPathLists.TRIMMABLE_CHESTPLATE_PATHS);
-		list.addAll(TrimPathLists.TRIMMABLE_LEGGINGS_PATHS);
-		list.addAll(TrimPathLists.TRIMMABLE_BOOTS_PATHS);
+		list.addAll(TrimPaths.TRIMMABLE_HELMET_PATHS);
+		list.addAll(TrimPaths.TRIMMABLE_CHESTPLATE_PATHS);
+		list.addAll(TrimPaths.TRIMMABLE_LEGGINGS_PATHS);
+		list.addAll(TrimPaths.TRIMMABLE_BOOTS_PATHS);
 		return list;
 	}
 	public static Map<String, Identifier> armorToOverlayPrefix() {
 		Object2ObjectLinkedOpenHashMap<String, Identifier> map = new Object2ObjectLinkedOpenHashMap<>();
 
-		TrimPathLists.TRIMMABLE_HELMET_PATHS.forEach(
+		TrimPaths.TRIMMABLE_HELMET_PATHS.forEach(
 			path -> map.put(path, ItemModelGenerators.TRIM_PREFIX_HELMET)
 		);
-		TrimPathLists.TRIMMABLE_CHESTPLATE_PATHS.forEach(
+		TrimPaths.TRIMMABLE_CHESTPLATE_PATHS.forEach(
 			path -> map.put(path, ItemModelGenerators.TRIM_PREFIX_CHESTPLATE)
 		);
-		TrimPathLists.TRIMMABLE_LEGGINGS_PATHS.forEach(
+		TrimPaths.TRIMMABLE_LEGGINGS_PATHS.forEach(
 			path -> map.put(path, ItemModelGenerators.TRIM_PREFIX_LEGGINGS)
 		);
-		TrimPathLists.TRIMMABLE_BOOTS_PATHS.forEach(
+		TrimPaths.TRIMMABLE_BOOTS_PATHS.forEach(
 			path -> map.put(path, ItemModelGenerators.TRIM_PREFIX_BOOTS)
 		);
 
