@@ -23,11 +23,11 @@
   "mixins": [
     "trimpatcher.mixins.json"
   ],
-  "accessWidener": "trimpatcher.accesswidener",
+  "accessWidener": "trimpatcher.classtweaker",
   "depends": {
     "fabric-api": "*",
     "minecraft": "${minecraft_version}",
-    "java": ">=21"
+    "java": ">=25"
   },
   "custom": {
     "modmenu": {

@@ -20,7 +20,7 @@ package net.frozenblock.trimpatcher.client.resources.model;
 import com.mojang.math.Transformation;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.client.resources.model.ModelState;
+import net.minecraft.client.renderer.block.dispatch.ModelState;
 import net.minecraft.core.Direction;
 import org.joml.Matrix4fc;
 
