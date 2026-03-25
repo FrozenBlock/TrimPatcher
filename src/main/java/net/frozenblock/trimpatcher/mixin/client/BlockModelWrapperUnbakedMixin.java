@@ -34,35 +34,36 @@ import net.frozenblock.trimpatcher.client.renderer.item.FakeUnbakedItemModel;
 import net.frozenblock.trimpatcher.client.resources.model.ModelStateWrapper;
 import net.frozenblock.trimpatcher.client.util.TrimPaths;
 import net.minecraft.client.data.models.model.ItemModelUtils;
-import net.minecraft.client.renderer.block.model.TextureSlots;
-import net.minecraft.client.renderer.item.BlockModelWrapper;
+import net.minecraft.client.renderer.block.dispatch.ModelState;
+import net.minecraft.client.renderer.item.CuboidItemModelWrapper;
 import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.client.renderer.item.SelectItemModel;
 import net.minecraft.client.renderer.item.properties.select.TrimMaterialProperty;
 import net.minecraft.client.renderer.texture.TextureAtlas;
-import net.minecraft.client.resources.model.Material;
 import net.minecraft.client.resources.model.ModelBaker;
-import net.minecraft.client.resources.model.ModelState;
-import net.minecraft.client.resources.model.QuadCollection;
 import net.minecraft.client.resources.model.ResolvedModel;
+import net.minecraft.client.resources.model.geometry.QuadCollection;
+import net.minecraft.client.resources.model.sprite.Material;
+import net.minecraft.client.resources.model.sprite.TextureSlots;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.Identifier;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.item.equipment.trim.TrimMaterial;
+import org.joml.Matrix4fc;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 
 @Environment(EnvType.CLIENT)
-@Mixin(value = BlockModelWrapper.Unbaked.class, priority = 898)
+@Mixin(value = CuboidItemModelWrapper.Unbaked.class, priority = 898)
 public abstract class BlockModelWrapperUnbakedMixin {
 
 	@Shadow
 	public abstract Identifier model();
 
 	@Shadow
-	public abstract ItemModel bake(ItemModel.BakingContext bakingContext);
+	public abstract ItemModel bake(ItemModel.BakingContext bakingContext, Matrix4fc transformation);
 
 	@Unique
 	private boolean trimPatcher$generatingNewModel = false;
@@ -79,8 +80,8 @@ public abstract class BlockModelWrapperUnbakedMixin {
 	)
 	public ItemModel trimPatcher$createAutoTrimmedArmors(
 		ItemModel original,
-		@Local(argsOnly = true) ItemModel.BakingContext context,
-		@Local TextureSlots slots
+		ItemModel.BakingContext context, Matrix4fc transformation,
+		@Local(name = "textureSlots") TextureSlots slots
 	) {
 		if (this.trimPatcher$generatingNewModel) return original;
 
@@ -107,14 +108,14 @@ public abstract class BlockModelWrapperUnbakedMixin {
 			final String materialWithoutDarkerSuffix = overlayMaterial.replace("_darker", "");
 			if (usedOverlayMaterials.contains(materialWithoutDarkerSuffix)) continue;
 
-			this.trimPatcher$material = new Material(TextureAtlas.LOCATION_ITEMS, trimOverlayPrefix.withSuffix("_" + overlayMaterial));;
+			this.trimPatcher$material = new Material(trimOverlayPrefix.withSuffix("_" + overlayMaterial));
 			this.trimPatcher$materialName = overlayMaterial;
 			usedOverlayMaterials.add(materialWithoutDarkerSuffix);
 
 			newTrimOverlays.add(
 				ItemModelUtils.when(
 					ResourceKey.create(Registries.TRIM_MATERIAL, Identifier.withDefaultNamespace(materialWithoutDarkerSuffix)),
-					new FakeUnbakedItemModel(this.bake(context))
+					new FakeUnbakedItemModel(this.bake(context, transformation))
 				)
 			);
 		}
@@ -123,14 +124,14 @@ public abstract class BlockModelWrapperUnbakedMixin {
 		this.trimPatcher$trimOverlayLayer = null;
 		this.trimPatcher$materialName = null;
 
-		return ItemModelUtils.select(new TrimMaterialProperty(), new FakeUnbakedItemModel(original), newTrimOverlays).bake(context);
+		return ItemModelUtils.select(new TrimMaterialProperty(), new FakeUnbakedItemModel(original), newTrimOverlays).bake(context, transformation);
 	}
 
 	@ModifyExpressionValue(
 		method = "bake",
 		at = @At(
 			value = "INVOKE",
-			target = "Lnet/minecraft/client/resources/model/ResolvedModel;getTopTextureSlots()Lnet/minecraft/client/renderer/block/model/TextureSlots;"
+			target = "Lnet/minecraft/client/resources/model/ResolvedModel;getTopTextureSlots()Lnet/minecraft/client/resources/model/sprite/TextureSlots;"
 		)
 	)
 	public TextureSlots trimPatcher$useAutoTrimmedSlots(TextureSlots original) {
@@ -146,14 +147,14 @@ public abstract class BlockModelWrapperUnbakedMixin {
 		method = "bake",
 		at = @At(
 			value = "INVOKE",
-			target = "Lnet/minecraft/client/resources/model/ResolvedModel;bakeTopGeometry(Lnet/minecraft/client/renderer/block/model/TextureSlots;Lnet/minecraft/client/resources/model/ModelBaker;Lnet/minecraft/client/resources/model/ModelState;)Lnet/minecraft/client/resources/model/QuadCollection;"
+			target = "Lnet/minecraft/client/resources/model/ResolvedModel;bakeTopGeometry(Lnet/minecraft/client/resources/model/sprite/TextureSlots;Lnet/minecraft/client/resources/model/ModelBaker;Lnet/minecraft/client/renderer/block/dispatch/ModelState;)Lnet/minecraft/client/resources/model/geometry/QuadCollection;"
 		)
 	)
 	public QuadCollection trimPatcher$useAutoTrimmedModelState(
-		ResolvedModel instance, TextureSlots slots, ModelBaker baker, ModelState modelState, Operation<QuadCollection> original
+		ResolvedModel instance, TextureSlots textureSlots, ModelBaker baker, ModelState state, Operation<QuadCollection> original
 	) {
-		if (this.trimPatcher$generatingNewModel) return original.call(instance, slots, baker, ModelStateWrapper.create(this.trimPatcher$materialName, modelState));
-		return original.call(instance, slots, baker, modelState);
+		if (this.trimPatcher$generatingNewModel) return original.call(instance, textureSlots, baker, ModelStateWrapper.create(this.trimPatcher$materialName, state));
+		return original.call(instance, textureSlots, baker, state);
 	}
 
 }
