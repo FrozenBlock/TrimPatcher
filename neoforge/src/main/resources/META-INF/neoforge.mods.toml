@@ -1,0 +1,36 @@
+modLoader="javafml"
+loaderVersion="[1,)"
+license="${license}"
+issueTrackerURL="https://github.com/FrozenBlock/TrimPatcher/issues"
+
+[[mods]]
+modId="${mod_id}"
+version="${mod_version}-neoforge"
+displayName="${mod_name}"
+displayURL="https://github.com/FrozenBlock/TrimPatcher"
+logoFile="assets/icon.png"
+authors="${mod_author}"
+description='''
+${mod_description}
+'''
+
+[[dependencies.${mod_id}]]
+modId="neoforge"
+type="required"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies.${mod_id}]]
+modId="minecraft"
+type="required"
+versionRange="${neoforge_minecraft_version}"
+ordering="NONE"
+side="BOTH"
+
+[[accessTransformers]]
+file="META-INF/accesstransformer.cfg"
+
+[[mixins]]
+config = "trimpatcher.mixins.json"
+[[mixins]]
+config = "trimpatcher-neoforge.mixins.json"
