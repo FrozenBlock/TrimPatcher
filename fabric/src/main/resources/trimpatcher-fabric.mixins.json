@@ -1,6 +1,6 @@
 {
   "required": true,
-  "package": "net.rebel459.template.mixin",
+  "package": "net.frozenblock.trimpatcher.mixin",
   "compatibilityLevel": "JAVA_25",
   "mixins": [],
   "client": [],
