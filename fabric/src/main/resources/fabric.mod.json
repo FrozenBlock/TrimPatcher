@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${mod_version}-fabric",
+  "name": "${mod_name}",
+  "description": "${mod_description}",
+  "authors": [
+    "${mod_author}"
+  ],
+  "contact": {
+    "sources": "https://github.com/FrozenBlock/TrimPatcher"
+  },
+  "license": "${license}",
+  "icon": "assets/icon.png",
+  "environment": "*",
+  "entrypoints": {
+    "client": [
+      "net.frozenblock.trimpatcher.TrimPatcherFabricClient"
+    ]
+  },
+  "mixins": [
+    "trimpatcher.mixins.json",
+    "trimpatcher-fabric.mixins.json"
+  ],
+  "accessWidener": "trimpatcher.classtweaker",
+  "depends": {
+    "fabricloader": ">=0.18",
+    "fabric-api": "*",
+    "minecraft": "${fabric_minecraft_version}",
+    "java": ">=25"
+  }
+}
