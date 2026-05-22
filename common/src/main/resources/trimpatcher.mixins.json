@@ -7,6 +7,7 @@
   ],
   "client": [
     "client.BlockModelWrapperUnbakedMixin",
+    "client.CuboidItemModelWrapperMixin",
     "client.SpriteSourceListMixin",
     "client.TrimMaterialPropertyMixin"
   ],
