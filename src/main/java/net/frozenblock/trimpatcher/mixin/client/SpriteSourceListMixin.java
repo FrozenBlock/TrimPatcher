@@ -41,10 +41,10 @@ public class SpriteSourceListMixin {
 			target = "(Ljava/util/List;)Lnet/minecraft/client/renderer/texture/atlas/SpriteSourceList;"
 		)
 	)
-	private static SpriteSourceList trimPatcher$blendTrimSources(List<SpriteSource> list, Operation<SpriteSourceList> original) {
+	private static SpriteSourceList trimPatcher$blendTrimSources(List<SpriteSource> sources, Operation<SpriteSourceList> original) {
 		final List<PalettedPermutations> trimSources = new ArrayList<>();
 		final List<SpriteSource> nonTrimSources = new ArrayList<>();
-		for (SpriteSource spriteSource : list) {
+		for (SpriteSource spriteSource : sources) {
 			if (spriteSource instanceof PalettedPermutations palettedPermutations && palettedPermutations.paletteKey().equals(TrimPatcherClient.TRIM_PALETTE_KEY)) {
 				trimSources.add(palettedPermutations);
 				continue;
@@ -52,7 +52,7 @@ public class SpriteSourceListMixin {
 			nonTrimSources.add(spriteSource);
 		}
 
-		if (trimSources.isEmpty()) return original.call(list);
+		if (trimSources.isEmpty()) return original.call(sources);
 
 		final List<Identifier> textures = new ArrayList<>();
 		final Map<String, Identifier> permutations = new Object2ObjectLinkedOpenHashMap<>();
@@ -77,5 +77,4 @@ public class SpriteSourceListMixin {
 		finalSpriteSources.add(combinedTrims);
 		return original.call(finalSpriteSources);
 	}
-
 }

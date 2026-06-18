@@ -65,5 +65,4 @@ public final class TrimPatcherClient implements ClientModInitializer {
 		TPConstants.log("Adding overlay material " + material, TPConstants.UNSTABLE_LOGGING);
 		(material.endsWith("_darker") ? FOUND_DARKER_OVERLAY_TEXTURES : FOUND_OVERLAY_TEXTURES).put(material, material);
 	}
-
 }

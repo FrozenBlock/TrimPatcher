@@ -39,7 +39,6 @@ import net.minecraft.client.renderer.item.CuboidItemModelWrapper;
 import net.minecraft.client.renderer.item.ItemModel;
 import net.minecraft.client.renderer.item.SelectItemModel;
 import net.minecraft.client.renderer.item.properties.select.TrimMaterialProperty;
-import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.resources.model.ModelBaker;
 import net.minecraft.client.resources.model.ResolvedModel;
 import net.minecraft.client.resources.model.geometry.QuadCollection;
@@ -63,7 +62,7 @@ public abstract class BlockModelWrapperUnbakedMixin {
 	public abstract Identifier model();
 
 	@Shadow
-	public abstract ItemModel bake(ItemModel.BakingContext bakingContext, Matrix4fc transformation);
+	public abstract ItemModel bake(ItemModel.BakingContext context, Matrix4fc transformation);
 
 	@Unique
 	private boolean trimPatcher$generatingNewModel = false;
@@ -81,7 +80,7 @@ public abstract class BlockModelWrapperUnbakedMixin {
 	public ItemModel trimPatcher$createAutoTrimmedArmors(
 		ItemModel original,
 		ItemModel.BakingContext context, Matrix4fc transformation,
-		@Local(name = "textureSlots") TextureSlots slots
+		@Local(name = "textureSlots") TextureSlots textureSlots
 	) {
 		if (this.trimPatcher$generatingNewModel) return original;
 
@@ -99,7 +98,7 @@ public abstract class BlockModelWrapperUnbakedMixin {
 		final List<String> applicableOverlayMaterials = TrimPatcherClient.getApplicableOverlayMaterials(armorMaterialGuess);
 		if (applicableOverlayMaterials.isEmpty()) return original;
 
-		this.trimPatcher$trimOverlayLayer = slots.getMaterial("layer1") != null ? "layer2" : "layer1";
+		this.trimPatcher$trimOverlayLayer = textureSlots.getMaterial("layer1") != null ? "layer2" : "layer1";
 		List<SelectItemModel.SwitchCase<ResourceKey<TrimMaterial>>> newTrimOverlays = new ArrayList<>();
 
 		final List<String> usedOverlayMaterials = new ArrayList<>();
@@ -156,5 +155,4 @@ public abstract class BlockModelWrapperUnbakedMixin {
 		if (this.trimPatcher$generatingNewModel) return original.call(instance, textureSlots, baker, ModelStateWrapper.create(this.trimPatcher$materialName, state));
 		return original.call(instance, textureSlots, baker, state);
 	}
-
 }

@@ -39,5 +39,4 @@ public class TrimMaterialPropertyMixin {
 		if (original == null) return original;
 		return ResourceKey.create(original.registryKey(), Identifier.withDefaultNamespace(original.identifier().getPath()));
 	}
-
 }

@@ -37,6 +37,5 @@ public record FakeUnbakedItemModel(ItemModel wrapped) implements ItemModel.Unbak
 	}
 
 	@Override
-	public void resolveDependencies(Resolver resolver) {
-	}
+	public void resolveDependencies(Resolver resolver) {}
 }
