@@ -1,0 +1,32 @@
+modLoader="javafml"
+loaderVersion="[4,)"
+license="${mod_license}"
+issueTrackerURL="${issues_url}"
+
+[[mods]]
+    modId="${mod_id}"
+    version="${mod_version}"
+    displayName="${mod_name}"
+    displayURL="${mod_url}"
+    iconFile="assets/trimpatcher/icon.png"
+    authors="Lunade/AViewFromTheTop"
+    description='''
+Makes Armor Trims and Trim Materials from any mod work together seamlessly on all Armor items!
+    '''
+
+[[mixins]]
+config="trimpatcher.mixins.json"
+
+[[ dependencies.trimpatcher ]]
+    modId="neoforge"
+    type="required"
+    versionRange="[${minecraft_version},)"
+    ordering="NONE"
+    side="BOTH"
+
+[[ dependencies.trimpatcher ]]
+    modId="minecraft"
+    type="required"
+    versionRange="[${minecraft_version},)"
+    ordering="NONE"
+    side="BOTH"

@@ -1,0 +1,5 @@
+classTweaker v1 official
+
+# Models
+accessible field net/minecraft/client/resources/model/sprite/TextureSlots resolvedValues Ljava/util/Map;
+accessible method net/minecraft/client/resources/model/sprite/TextureSlots <init> (Ljava/util/Map;)V
